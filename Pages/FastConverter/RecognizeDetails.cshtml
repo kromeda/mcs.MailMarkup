@@ -1,0 +1,116 @@
+﻿@page "/fastconverter/unrecognized"
+@model RecognizeDetailsModel
+@using MailMarkup.Cache
+@inject IServiceCache cache
+@{
+    ViewData["Title"] = "Уведомление";
+
+    string organizationName = cache.OrganizationName;
+    bool external = Model.ExternalSend;
+    bool recognizedAny = Model.Recognized?.Count > 0;
+    bool notRecognizedAny = Model.Unrecognized?.Count > 0;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--[if (gte mso 9)|(IE)]>
+          <style>
+              * {
+                  font-family: Tahoma sans-serif !important;
+              }
+          </style>
+      <link href='https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap&subset=cyrillic' rel='stylesheet' type='text/css'>
+      <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap&subset=cyrillic" rel="stylesheet" />
+
+    <title>Уведомление</title>
+</head>
+<body style="margin: 0; padding: 0; background-color:#f0f3f4; padding:70px 0">
+    <!--[if (gte mso 9)|(IE)]>
+    <table width="600" align="center"><tr><td style="padding-top:0; padding-bottom:0; padding-right:0; padding-left:0; margin:0px;">
+    <![endif]-->
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse; margin: 0 auto; font: 18px/28px 'Roboto'; background-color: #fff;">
+        <tr>
+            <td>
+                <img alt="ТНС энерго" src="https://cdn.tns-e.ru/medialibrary/bc5/bc58718df00461e6dbc3b374057df5bd/logo.jpg" title="ТНС энерго" border="0">
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                    @if (external)
+                    {
+                        <tr>
+                            <td>
+                                <p style="font-size: 24px; text-align: center;">
+                                    <i><b>Уважаемый потребитель!</b></i>
+                                </p>
+                                <p style="text-indent: 20px; padding-left: 15px;">
+                                    <i>
+                                        В целях своевременной обработки показаний, корректного расчета объемов потребленной электроэнергии просим Вас предоставить данные о показаниях приборов учета:<br />
+                                        <span style="text-indent: 20px;">- в случае если Вы рассчитываетесь по 1 либо 2 ценовой категории в формате <b style="color: #13a438">приложения 1</b>,</span><br />
+                                        <span style="text-indent: 20px;">- в случае если Вы рассчитываетесь по 3-6 ценовой категории, то интегральные показания в формате <b style="color: #13a438">приложения 1</b>, интервальные показания в формате <b style="color: #13a438">приложения 2</b>.</span>
+                                    </i>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i style="padding-left: 15px;">С Уважением, @organizationName.</i>
+                            </td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <td>
+                            @if (recognizedAny && external)
+                            {
+                                <span><b>Принято: </b></span>
+                                <ul>
+                                    @foreach (var item in Model.Recognized)
+                                    {
+                                        <li>@item</li>
+                                    }
+                                </ul>
+                            }
+
+                            @if (notRecognizedAny)
+                            {
+                                <b>Непринято:</b>
+                                <ul>
+                                    @foreach (var item in Model.Unrecognized)
+                                    {
+                                        <li>@item</li>
+                                    }
+                                </ul>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr style="background-color:#13a438; border:1px solid #e0e0e0; border-top:1px solid #f0f3f4; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);  color:#6e6e6e; font-size:13px; line-height:22px;">
+            <td style="padding: 20px; background: #13a438;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td max-width="500" width="90%" valign="top" style="color: #000;">
+                            Это письмо сформировано автоматически, отвечать на него не нужно.
+                            Если это сообщение пришло к Вам по ошибке, пожалуйста, проигнорируйте его.
+                            С уважением, @organizationName.
+                        </td>
+                        <td align="right" width="40px" valign="middle">
+                            <img src="data:image/png;base64,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" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <!--[if (gte mso 9)|(IE)]>
+       </td></tr></table><![endif]-->
+</body>
+</html>
