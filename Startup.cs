@@ -1,7 +1,8 @@
 using MailMarkup.BackgroundWorkers;
 using MailMarkup.Cache;
 using MailMarkup.DataAccess;
-using MailMarkup.Exceptinos;
+using MailMarkup.Middleware;
+using MailMarkup.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,12 +24,14 @@ namespace MailMarkup
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<MailMarkupConfiguration>(Configuration.GetSection(nameof(MailMarkupConfiguration)));
+
             services.AddDbContext<StekContext>(options => options.UseSqlServer(Configuration.GetConnectionString("StekConnection")));
             services.AddRazorPages().AddRazorPagesOptions(o => o.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()));
 
             services.AddSingleton<IServiceCache, ServiceCache>();
             services.AddScoped<IStekRepository, StekRepository>();
-            services.AddScoped<IExceptionHandler, ExceptionHandler>();
             services.AddHostedService<CacheUpdater>();
         }
 
@@ -44,6 +47,7 @@ namespace MailMarkup
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
