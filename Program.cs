@@ -14,10 +14,15 @@ namespace MailMarkup
         {
             try
             {
+                var environment = (string)Environment.GetEnvironmentVariables(
+                    EnvironmentVariableTarget.Machine)["ASPNETCORE_ENVIRONMENT"] ?? "Development";
+
                 var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile($"appsettings.{environment}.json")
                     .AddUserSecrets<MailMarkupConfiguration>()
                     .Build();
-
+                
                 var options = configuration
                     .GetSection(nameof(MailMarkupConfiguration))
                     .Get<MailMarkupConfiguration>();

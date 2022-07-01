@@ -1,5 +1,7 @@
 using MailMarkup.Cache;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace MailMarkup.Pages.FastConverter
 {
@@ -14,9 +16,9 @@ namespace MailMarkup.Pages.FastConverter
 
         public string OrganizationName => cache.OrganizationName;
 
-        public void OnGet()
+        public void OnGet([FromServices] ILogger<AllRecognizedModel> logger)
         {
-
+            logger.LogInformation("Запрос разметки email письма для ответа на отправку показаний. Все файлы приняты.");
         }
     }
 }
