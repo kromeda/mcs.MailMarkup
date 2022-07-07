@@ -4,6 +4,6 @@ namespace MailMarkup.DataAccess
 {
     public interface IStekRepository
     {
-        Task<string> GetOrganizationName();
+        Task<string> GetOrganizationNameAsync();
     }
 }

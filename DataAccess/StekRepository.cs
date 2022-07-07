@@ -10,7 +10,7 @@ namespace MailMarkup.DataAccess
 
         public StekRepository(StekContext context) => this.context = context;
 
-        public async Task<string> GetOrganizationName()
+        public async Task<string> GetOrganizationNameAsync()
         {
             using DbCommand command = context.Database.GetDbConnection().CreateCommand();
 

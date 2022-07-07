@@ -34,7 +34,7 @@ namespace MailMarkup.BackgroundWorkers
 
                     await Task.WhenAll(new Task[]
                     {
-                        Task.Run(async () => cache.OrganizationName = await repository.GetOrganizationName())
+                        Task.Run(async () => cache.OrganizationName = await repository.GetOrganizationNameAsync())
                     })
                     .ContinueWith(completedTask =>
                     {
